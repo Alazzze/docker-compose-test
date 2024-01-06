@@ -1,3 +1,5 @@
+[![GitHub Actions Status](https://github.com/Alazzze/docker-compose-test/workflows/docker-compose/badge.svg)](https://github.com/Alazzze/docker-compose-test/actions)
+
 # Docker Compose Test Project
 
 ## Overview
