@@ -31,7 +31,8 @@ jobs:
           docker-compose up -d
           sleep 30
           docker-compose ps
-          docker-compose exec mysql mysql --user=root --database=${MYSQL_DATABASE} --execute="SELECT 1" --password=${MYSQL_ROOT_PASSWORD}
+          MYSQL_ROOT_PASSWORD=$(grep MYSQL_ROOT_PASSWORD .env | cut -d '=' -f2)
+          docker-compose exec mysql mysql --user=root --password=${MYSQL_ROOT_PASSWORD} --database=${MYSQL_DATABASE} --execute="SELECT 1"
 
       - name: Clean up
         run: docker-compose down
