@@ -27,11 +27,10 @@ jobs:
 
       - name: Build and test
         run: |
+          cp .env.example .env
           docker-compose up -d
           docker-compose ps
-          # Add your test commands here
-          # For example:
-          # docker-compose exec mysql mysql --user=root --password=${MYSQL_ROOT_PASSWORD} --database=${MYSQL_DATABASE} --execute="SELECT 1"
+          docker-compose exec mysql mysql --user=root --password=test_root_password --database=test_database --execute="SELECT 1"
 
       - name: Clean up
         run: docker-compose down
