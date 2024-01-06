@@ -31,7 +31,8 @@ jobs:
           docker-compose up -d
           sleep 10
           docker-compose ps
-          docker-compose exec -T mysql mysql --user=root --password=test_password --database=test_database --execute="SELECT 1"
+          docker-compose exec -T mysql mysql --user=root --password=${MYSQL_ROOT_PASSWORD} --database=${MYSQL_DATABASE} --execute="SELECT 1"
+
 
 
 
