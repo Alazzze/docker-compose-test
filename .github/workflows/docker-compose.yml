@@ -29,9 +29,9 @@ jobs:
         run: |
           cp .env.example .env
           docker-compose up -d
-          sleep 30  # Змінили затримку на 30 секунд, можливо, знадобиться збільшити чи зменшити
+          sleep 30
           docker-compose ps
-          docker-compose exec -T mysql mysql --user=root --password=${MYSQL_ROOT_PASSWORD} --database=${MYSQL_DATABASE} --execute="SELECT 1"
+          docker-compose exec mysql mysql --user=root --database=${MYSQL_DATABASE} --execute="SELECT 1" --password=${MYSQL_ROOT_PASSWORD}
 
       - name: Clean up
         run: docker-compose down
