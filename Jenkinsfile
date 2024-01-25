@@ -12,7 +12,7 @@ pipeline {
         stage('Build and Test') {
             steps {
                 script {
-                    sh 'docker-compose -f https://raw.githubusercontent.com/Alazzze/wordpress-docker-phpmyadmin/main/docker-compose.yml up --build'
+                    sh 'docker-compose -f docker-compose.yml up --build'
                 }
             }
         }
