@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        DOCKER_COMPOSE_VERSION = '1.29.0'
+        DOCKER_COMPOSE_VERSION = "1.29.0"  // Версія Docker Compose
     }
 
     stages {
@@ -13,18 +13,15 @@ pipeline {
                 }
             }
         }
+
         stage('Build and Test') {
             steps {
                 script {
-                    // Use the Docker Compose version specified in the environment
-                    sh "docker-compose -v || curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-\$(uname -s)-\$(uname -m) -o /usr/local/bin/docker-compose"
-                    sh 'chmod +x /usr/local/bin/docker-compose'
-
-                    // Copy .env.example to .env
-                    sh 'cp .env.example .env'
-
-                    // Build and start containers
-                    sh 'docker-compose up --build'
+                    sh '''
+                        docker-compose -v || curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                        chmod +x /usr/local/bin/docker-compose
+                        docker-compose -f docker-compose.yml up --build
+                    '''
                 }
             }
         }
