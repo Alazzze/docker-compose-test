@@ -18,8 +18,11 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        docker-compose -v || curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-                        chmod +x /usr/local/bin/docker-compose
+                        docker-compose -v || {
+                            curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o docker-compose
+                            chmod +x docker-compose
+                            export PATH=$PATH:/var/lib/jenkins/workspace/test5
+                        }
                         docker-compose -f docker-compose.yml up --build
                     '''
                 }
