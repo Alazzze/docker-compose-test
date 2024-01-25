@@ -13,8 +13,9 @@ pipeline {
             steps {
                 script {
                     sh '''
+                        docker-compose -f docker-compose.yml down -v
                         docker-compose -f docker-compose.yml up --build --detach
-                        docker-compose -f docker-compose.yml logs -f
+                        docker-compose -f docker-compose.yml logs -f --tail="all" --timestamps --no-color | timeout 10m cat
                     '''
                 }
             }
