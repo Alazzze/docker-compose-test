@@ -12,6 +12,7 @@ pipeline {
         stage('Build and Test') {
             steps {
                 script {
+                    sh 'cp .env.example .env'  // Копіюємо .env.example в .env
                     sh 'docker-compose -f docker-compose.yml up --build'
                 }
             }
