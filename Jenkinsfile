@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    git 'https://github.com/Alazzze/wordpress-docker-phpmyadmin.git', branch: 'main'
+                    git url: 'https://github.com/Alazzze/wordpress-docker-phpmyadmin.git', branch: 'main'
                 }
             }
         }
