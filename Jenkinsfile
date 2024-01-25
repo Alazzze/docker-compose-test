@@ -17,7 +17,7 @@ pipeline {
             steps {
                 script {
                     // Use the Docker Compose version specified in the environment
-                    sh "docker-compose -v || curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose"
+                    sh "docker-compose -v || curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-\$(uname -s)-\$(uname -m) -o /usr/local/bin/docker-compose"
                     sh 'chmod +x /usr/local/bin/docker-compose'
 
                     // Copy .env.example to .env
