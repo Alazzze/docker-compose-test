@@ -1,39 +1,54 @@
 pipeline {
     agent any
-    
+
+    environment {
+        GIT_TOOL = tool name: 'Default', type: 'hudson.plugins.git.GitTool'
+        DOCKER_TOOL = tool name: 'Default', type: 'hudson.plugins.docker.commons.tools.DockerTool'
+    }
+
     stages {
-        stage('Checkout') {
+        stage('Checkout SCM') {
             steps {
                 script {
-                    git url: 'https://github.com/Alazzze/wordpress-docker-phpmyadmin.git', branch: 'main'
+                    withEnv(["GIT_HOME=${env.GIT_TOOL}/bin", "PATH+GIT=${env.GIT_TOOL}/bin"]) {
+                        checkout scm
+                    }
                 }
             }
         }
+
         stage('Build and Test') {
             steps {
                 script {
-                    sh '''
-                        docker-compose -f docker-compose.yml down -v
-                        docker-compose -f docker-compose.yml rm -f
-                        docker-compose -f docker-compose.yml pull
-                        docker-compose -f docker-compose.yml up --build --detach
-                        docker-compose -f docker-compose.yml logs -f --tail="all" --timestamps --no-color | timeout 10m cat
-                    '''
+                    withEnv(["DOCKER_HOME=${env.DOCKER_TOOL}/bin", "PATH+DOCKER=${env.DOCKER_TOOL}/bin"]) {
+                        try {
+                            sh 'docker-compose -f docker-compose.yml down -v'
+                        } catch (Exception ex) {
+                            echo "Error occurred while stopping Docker containers: ${ex.message}"
+                            // Додайте необхідні дії для обробки помилки
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Post Actions') {
+            post {
+                always {
+                    script {
+                        try {
+                            sh 'docker-compose -f docker-compose.yml down -v'
+                        } catch (Exception ex) {
+                            echo "Error occurred while stopping Docker containers: ${ex.message}"
+                            // Додайте необхідні дії для обробки помилки
+                        }
+                    }
                 }
             }
         }
     }
 
-    post {
-        always {
-            script {
-                // Завершення контейнерів та видалення мережі
-                sh '''
-                    docker-compose -f docker-compose.yml down -v
-                    docker-compose -f docker-compose.yml rm -f
-                    docker network prune -f
-                '''
-            }
-        }
+    options {
+        timeout(time: 1, unit: 'HOURS') // Додайте тайм-аут для уникнення вічних зависань
     }
 }
