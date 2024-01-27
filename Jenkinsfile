@@ -4,9 +4,7 @@ pipeline {
     stages {
         stage('Checkout SCM') {
             steps {
-                script {
-                    checkout scm
-                }
+                checkout scm
             }
         }
 
@@ -15,9 +13,20 @@ pipeline {
                 script {
                     try {
                         sh 'docker-compose down -v'
+                        sh 'docker-compose build'
+                        sh 'docker-compose up -d'
+                        
+                        // Вивести інформацію про версії образів
+                        sh 'docker-compose version'
+
+                        // Почекати деякий час для того, щоб сервіси успішно запустилися
+                        sleep time: 30, unit: 'SECONDS'
+
+                        // Показати запущені контейнери
+                        sh 'docker ps'
                     } catch (Exception ex) {
-                        echo "Error occurred while stopping Docker containers: ${ex.message}"
-                        // Продовжуйте виконання, навіть якщо відбулася помилка
+                        echo "Error occurred: ${ex.message}"
+                        currentBuild.result = 'FAILURE'
                     }
                 }
             }
@@ -26,18 +35,21 @@ pipeline {
 
     post {
         always {
+            // Завжди виконується, навіть якщо є помилка
             script {
-                try {
-                    sh 'docker-compose down -v'
-                } catch (Exception ex) {
-                    echo "Error occurred while stopping Docker containers: ${ex.message}"
-                    // Продовжуйте виконання, навіть якщо відбулася помилка
-                }
+                // Зупинити та видалити контейнери після завершення тестів
+                sh 'docker-compose down -v'
             }
         }
-    }
 
-    options {
-        timeout(time: 1, unit: 'HOURS')
+        success {
+            // Виконується, якщо пайплайн завершується успішно
+            echo 'Deployment and testing successful!'
+        }
+
+        failure {
+            // Виконується, якщо пайплайн завершується з помилкою
+            echo 'Deployment or testing failed!'
+        }
     }
 }
