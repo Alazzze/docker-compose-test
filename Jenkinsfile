@@ -12,17 +12,18 @@ pipeline {
             steps {
                 script {
                     try {
+                        // Зупинка і видалення контейнерів
                         sh 'docker-compose down -v'
+                    } catch (Exception ex) {
+                        echo "Error occurred while stopping Docker containers: ${ex.message}"
+                        // Продовжуйте виконання, навіть якщо відбулася помилка
+                    }
+
+                    // Побудова та запуск контейнерів
+                    try {
                         sh 'docker-compose build'
                         sh 'docker-compose up -d'
-
-                        // Вивести інформацію про версії образів
-                        sh 'docker-compose version'
-
-                        // Почекати деякий час для того, щоб сервіси успішно запустилися
                         sleep time: 30, unit: 'SECONDS'
-
-                        // Перевірити стан контейнерів перед завершенням
                         def containersRunning = sh(script: 'docker ps --format "{{.Names}}"', returnStatus: true).isSuccess()
                         if (containersRunning) {
                             echo 'All containers are running.'
@@ -30,7 +31,7 @@ pipeline {
                             error 'Some containers failed to start.'
                         }
                     } catch (Exception ex) {
-                        echo "Error occurred: ${ex.message}"
+                        echo "Error occurred while building and starting Docker containers: ${ex.message}"
                         currentBuild.result = 'FAILURE'
                     }
                 }
@@ -42,8 +43,13 @@ pipeline {
         always {
             // Завжди виконується, навіть якщо є помилка
             script {
-                // Зупинити та видалити контейнери після завершення тестів
-                sh 'docker-compose down -v'
+                try {
+                    // Зупинка і видалення контейнерів
+                    sh 'docker-compose down -v'
+                } catch (Exception ex) {
+                    echo "Error occurred while stopping Docker containers: ${ex.message}"
+                    // Продовжуйте виконання, навіть якщо відбулася помилка
+                }
             }
         }
 
