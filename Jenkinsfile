@@ -14,7 +14,8 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'docker-compose -f docker-compose.yml down -v'
+                        sh 'docker-compose stop'
+                        sh 'docker-compose rm -f'
                     } catch (Exception ex) {
                         echo "Error occurred while stopping Docker containers: ${ex.message}"
                         // Додайте необхідні дії для обробки помилки
@@ -28,7 +29,8 @@ pipeline {
         always {
             script {
                 try {
-                    sh 'docker-compose -f docker-compose.yml down -v'
+                    sh 'docker-compose stop'
+                    sh 'docker-compose rm -f'
                 } catch (Exception ex) {
                     echo "Error occurred while stopping Docker containers: ${ex.message}"
                     // Додайте необхідні дії для обробки помилки
