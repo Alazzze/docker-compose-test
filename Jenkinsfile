@@ -17,7 +17,7 @@ pipeline {
                         sh 'docker-compose down -v'
                     } catch (Exception ex) {
                         echo "Error occurred while stopping Docker containers: ${ex.message}"
-                        currentBuild.result = 'FAILURE'
+                        // Продовжуйте виконання, навіть якщо відбулася помилка
                     }
                 }
             }
@@ -31,7 +31,7 @@ pipeline {
                     sh 'docker-compose down -v'
                 } catch (Exception ex) {
                     echo "Error occurred while stopping Docker containers: ${ex.message}"
-                    currentBuild.result = 'FAILURE'
+                    // Продовжуйте виконання, навіть якщо відбулася помилка
                 }
             }
         }
