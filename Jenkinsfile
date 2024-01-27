@@ -14,11 +14,10 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'docker-compose stop'
-                        sh 'docker-compose rm -f'
+                        sh 'docker-compose down -v'
                     } catch (Exception ex) {
                         echo "Error occurred while stopping Docker containers: ${ex.message}"
-                        // Додайте необхідні дії для обробки помилки
+                        currentBuild.result = 'FAILURE'
                     }
                 }
             }
@@ -29,17 +28,16 @@ pipeline {
         always {
             script {
                 try {
-                    sh 'docker-compose stop'
-                    sh 'docker-compose rm -f'
+                    sh 'docker-compose down -v'
                 } catch (Exception ex) {
                     echo "Error occurred while stopping Docker containers: ${ex.message}"
-                    // Додайте необхідні дії для обробки помилки
+                    currentBuild.result = 'FAILURE'
                 }
             }
         }
     }
 
     options {
-        timeout(time: 1, unit: 'HOURS') // Додайте тайм-аут для уникнення вічних зависань
+        timeout(time: 1, unit: 'HOURS')
     }
 }
