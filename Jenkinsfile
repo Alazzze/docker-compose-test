@@ -15,6 +15,8 @@ pipeline {
                 script {
                     try {
                         sh 'docker-compose down -v'
+                        sh 'docker-compose up -d' // Додана команда для запуску контейнерів
+                        sh 'docker-compose logs' // Виведення логів контейнерів
                     } catch (Exception ex) {
                         echo "Error occurred while stopping Docker containers: ${ex.message}"
                         // Продовжуйте виконання, навіть якщо відбулася помилка
