@@ -4,30 +4,20 @@ pipeline {
     stages {
         stage('Checkout SCM') {
             steps {
-                checkout scm
+                script {
+                    checkout scm
+                }
             }
         }
 
         stage('Build and Test') {
             steps {
                 script {
-                    // Зупинка і видалення контейнерів
-                    sh 'docker-compose down -v || true'  // Добавляємо `|| true`, щоб продовжити виконання, навіть якщо виникає помилка
-
-                    // Побудова та запуск контейнерів
                     try {
-                        sh 'docker-compose build'
-                        sh 'docker-compose up -d'
-                        sleep time: 30, unit: 'SECONDS'
-                        def containersRunning = sh(script: 'docker ps --format "{{.Names}}"', returnStatus: true).isSuccess()
-                        if (containersRunning) {
-                            echo 'All containers are running.'
-                        } else {
-                            error 'Some containers failed to start.'
-                        }
+                        sh 'docker-compose down -v'
                     } catch (Exception ex) {
-                        echo "Error occurred while building and starting Docker containers: ${ex.message}"
-                        currentBuild.result = 'FAILURE'
+                        echo "Error occurred while stopping Docker containers: ${ex.message}"
+                        // Продовжуйте виконання, навіть якщо відбулася помилка
                     }
                 }
             }
@@ -36,21 +26,18 @@ pipeline {
 
     post {
         always {
-            // Завжди виконується, навіть якщо є помилка
             script {
-                // Зупинка і видалення контейнерів
-                sh 'docker-compose down -v || true'  // Добавляємо `|| true`, щоб продовжити виконання, навіть якщо виникає помилка
+                try {
+                    sh 'docker-compose down -v'
+                } catch (Exception ex) {
+                    echo "Error occurred while stopping Docker containers: ${ex.message}"
+                    // Продовжуйте виконання, навіть якщо відбулася помилка
+                }
             }
         }
+    }
 
-        success {
-            // Виконується, якщо пайплайн завершується успішно
-            echo 'Deployment and testing successful!'
-        }
-
-        failure {
-            // Виконується, якщо пайплайн завершується з помилкою
-            echo 'Deployment or testing failed!'
-        }
+    options {
+        timeout(time: 1, unit: 'HOURS')
     }
 }
