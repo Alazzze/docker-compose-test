@@ -11,13 +11,8 @@ pipeline {
         stage('Build and Test') {
             steps {
                 script {
-                    try {
-                        // Зупинка і видалення контейнерів
-                        sh 'docker-compose down -v'
-                    } catch (Exception ex) {
-                        echo "Error occurred while stopping Docker containers: ${ex.message}"
-                        // Продовжуйте виконання, навіть якщо відбулася помилка
-                    }
+                    // Зупинка і видалення контейнерів
+                    sh 'docker-compose down -v'
 
                     // Побудова та запуск контейнерів
                     try {
@@ -43,13 +38,8 @@ pipeline {
         always {
             // Завжди виконується, навіть якщо є помилка
             script {
-                try {
-                    // Зупинка і видалення контейнерів
-                    sh 'docker-compose down -v'
-                } catch (Exception ex) {
-                    echo "Error occurred while stopping Docker containers: ${ex.message}"
-                    // Продовжуйте виконання, навіть якщо відбулася помилка
-                }
+                // Зупинка і видалення контейнерів
+                sh 'docker-compose down -v'
             }
         }
 
