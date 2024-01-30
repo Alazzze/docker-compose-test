@@ -27,14 +27,16 @@ pipeline {
                         }
                         
                         // Запуск контейнерів зі значеннями з .env.example
-                        sh "MYSQL_ROOT_PASSWORD=${envVars.MYSQL_ROOT_PASSWORD} \
+                        sh """
+                            MYSQL_ROOT_PASSWORD=${envVars.MYSQL_ROOT_PASSWORD} \
                             MYSQL_DATABASE=${envVars.MYSQL_DATABASE} \
                             MYSQL_USER=${envVars.MYSQL_USER} \
                             MYSQL_PASSWORD=${envVars.MYSQL_PASSWORD} \
                             WORDPRESS_DB_NAME=${envVars.WORDPRESS_DB_NAME} \
                             WORDPRESS_DB_USER=${envVars.WORDPRESS_DB_USER} \
                             WORDPRESS_DB_PASSWORD=${envVars.WORDPRESS_DB_PASSWORD} \
-                            docker-compose up -d"
+                            docker-compose up -d
+                        """
 
                         sh 'docker-compose logs -t' // Виведення логів контейнерів з мітками часу
                     } catch (Exception ex) {
@@ -53,4 +55,14 @@ pipeline {
                     sh 'docker-compose down -v'
                 } catch (Exception ex) {
                     echo "Error occurred while stopping Docker containers: ${ex.message}"
-                    // Продовжуйте виконан
+                    // Продовжуйте виконання, навіть я
+                    // Якщо вибачитеся і можна оновити з новим коментарем
+                }
+            }
+        }
+    }
+
+    options {
+        timeout(time: 1, unit: 'HOURS')
+    }
+}
