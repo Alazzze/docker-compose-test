@@ -42,16 +42,17 @@ jobs:
     needs: build
 
     steps:
+      - name: Change to the directory containing docker-compose.yml
+        run: cd wordpress-docker-phpmyadmin/.github/workflows
+
       - name: List files in the current directory
         run: ls -l
 
       - name: Check current directory
         run: pwd
 
-      - name: Check if docker-compose.yml exists
-        run: |
-          ls -l
-          test -f docker-compose.yml
+      - name: Find docker-compose.yml
+        run: find . -type f -name "docker-compose.yml"
 
       - name: Deploy to Production
         run: |
