@@ -41,7 +41,7 @@ pipeline {
                         sh 'docker-compose logs -t' // Виведення логів контейнерів з мітками часу
                     } catch (Exception ex) {
                         echo "Error occurred while stopping/starting Docker containers: ${ex.message}"
-                        // Продовжуйте виконання, навіть якщо відбулася помилка
+                        // Продовжує виконання, навіть якщо відбулася помилка
                     }
                 }
             }
@@ -55,8 +55,7 @@ pipeline {
                     sh 'docker-compose down -v'
                 } catch (Exception ex) {
                     echo "Error occurred while stopping Docker containers: ${ex.message}"
-                    // Продовжуйте виконання, навіть я
-                    // Якщо вибачитеся і можна оновити з новим коментарем
+                   
                 }
             }
         }
