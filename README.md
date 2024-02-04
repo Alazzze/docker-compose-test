@@ -1,4 +1,5 @@
-[![GitHub Actions Status](https://github.com/Alazzze/wordpress-docker-phpmyadmin/workflows/github-actions-docker-compose/badge.svg)](https://github.com/Alazzze/wordpress-docker-phpmyadmin/actions)
+[![GitHub Actions Status](https://github.com/Alazzze/wordpress-docker-phpmyadmin/workflows/CI/CD%20with%20Docker%20Compose/badge.svg)](https://github.com/Alazzze/wordpress-docker-phpmyadmin/actions)
+
 # Docker Compose Test Project
 
 ## Overview
