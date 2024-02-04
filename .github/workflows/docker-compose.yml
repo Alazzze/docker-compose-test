@@ -43,7 +43,7 @@ jobs:
 
     steps:
       - name: List files in the current directory
-        run: ls -l
+        run: ls -l $GITHUB_WORKSPACE
 
       - name: Check current directory
         run: pwd
@@ -53,5 +53,5 @@ jobs:
 
       - name: Deploy to Production
         run: |
-          cd $GITHUB_WORKSPACE/.github/workflows
-          docker-compose -f docker-compose.yml up -d
+          cd $GITHUB_WORKSPACE
+          docker-compose -f .github/workflows/docker-compose.yml up -d
