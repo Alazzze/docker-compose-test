@@ -49,7 +49,7 @@ jobs:
         run: pwd
 
       - name: Find docker-compose.yml
-        run: find . -type f -name "docker-compose.yml"
+        run: find $GITHUB_WORKSPACE -type f -name "docker-compose.yml"
 
       - name: Deploy to Production
         run: |
