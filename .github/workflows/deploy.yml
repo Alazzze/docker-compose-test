@@ -49,7 +49,9 @@ jobs:
         run: pwd
 
       - name: Check if docker-compose.yml exists
-        run: test -f docker-compose.yml
+        run: |
+          ls -l
+          test -f docker-compose.yml
 
       - name: Deploy to Production
         run: |
