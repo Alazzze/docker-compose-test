@@ -28,30 +28,11 @@ jobs:
       - name: Build and test
         run: |
           cp .env.example .env
-          docker-compose up -d
+          docker-compose -f .github/workflows/github-actions-docker-compose.yml up -d
           sleep 30
-          docker-compose ps
+          docker-compose -f .github/workflows/github-actions-docker-compose.yml ps
           MYSQL_ROOT_PASSWORD=$(grep MYSQL_ROOT_PASSWORD .env | cut -d '=' -f2)
-          docker-compose exec -T mysql mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --database="${MYSQL_DATABASE}" --execute="SELECT 1"
+          docker-compose -f .github/workflows/github-actions-docker-compose.yml exec -T mysql mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --database="${MYSQL_DATABASE}" --execute="SELECT 1"
 
       - name: Clean up
-        run: docker-compose down
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: List files in the current directory
-        run: ls -l $GITHUB_WORKSPACE
-
-      - name: Check current directory
-        run: pwd
-
-      - name: Find docker-compose.yml
-        run: find $GITHUB_WORKSPACE -type f -name "github-actions-docker-compose.yml"
-
-      - name: Deploy to Production
-        run: |
-          cd $GITHUB_WORKSPACE/.github/workflows
-          docker-compose -f github-actions-docker-compose.yml up -d
+        run: docker-compose -f .github/workflows/github-actions-docker-compose.yml down
