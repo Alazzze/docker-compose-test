@@ -1,4 +1,4 @@
-name: Docker Compose
+name: CI/CD with Docker Compose
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     services:
