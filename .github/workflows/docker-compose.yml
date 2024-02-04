@@ -53,4 +53,5 @@ jobs:
 
       - name: Deploy to Production
         run: |
+          cd $GITHUB_WORKSPACE
           docker-compose up -d
