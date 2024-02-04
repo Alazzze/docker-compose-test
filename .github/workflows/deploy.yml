@@ -45,6 +45,9 @@ jobs:
       - name: List files in the current directory
         run: ls -l
 
+      - name: Check current directory
+        run: pwd
+
       - name: Check if docker-compose.yml exists
         run: test -f docker-compose.yml
 
