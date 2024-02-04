@@ -42,9 +42,6 @@ jobs:
     needs: build
 
     steps:
-      - name: Change to the directory containing docker-compose.yml
-        run: cd wordpress-docker-phpmyadmin/.github/workflows
-
       - name: List files in the current directory
         run: ls -l
 
