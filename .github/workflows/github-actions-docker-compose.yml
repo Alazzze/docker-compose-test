@@ -53,4 +53,5 @@ jobs:
 
       - name: Deploy to Production
         run: |
-          docker-compose -f $GITHUB_WORKSPACE/.github/workflows/github-actions-docker-compose.yml up -d
+          cd $GITHUB_WORKSPACE/.github/workflows
+          docker-compose -f github-actions-docker-compose.yml up -d
