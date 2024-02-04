@@ -28,14 +28,14 @@ jobs:
       - name: Build and test
         run: |
           cp .env.example .env
-          docker-compose -f .github/workflows/docker-compose.yml up -d
+          docker-compose -f .github/workflows/github-actions-docker-compose.yml up -d
           sleep 30
-          docker-compose -f .github/workflows/docker-compose.yml ps
+          docker-compose -f .github/workflows/github-actions-docker-compose.yml ps
           MYSQL_ROOT_PASSWORD=$(grep MYSQL_ROOT_PASSWORD .env | cut -d '=' -f2)
-          docker-compose -f .github/workflows/docker-compose.yml exec -T mysql mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --database="${MYSQL_DATABASE}" --execute="SELECT 1"
+          docker-compose -f .github/workflows/github-actions-docker-compose.yml exec -T mysql mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --database="${MYSQL_DATABASE}" --execute="SELECT 1"
 
       - name: Clean up
-        run: docker-compose -f .github/workflows/docker-compose.yml down
+        run: docker-compose -f .github/workflows/github-actions-docker-compose.yml down
 
   deploy:
     runs-on: ubuntu-latest
@@ -54,4 +54,4 @@ jobs:
       - name: Deploy to Production
         run: |
           cd $GITHUB_WORKSPACE/.github/workflows
-          docker-compose -f docker-compose.yml up -d
+          docker-compose -f github-actions-docker-compose.yml up -d
