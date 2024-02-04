@@ -42,7 +42,9 @@ jobs:
     needs: build
 
     steps:
+      - name: List files in the current directory
+        run: ls -l
+
       - name: Deploy to Production
         run: |
-        
           docker-compose up -d
