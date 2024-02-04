@@ -1,4 +1,4 @@
-name: docker-compose
+name: Docker Compose
 
 on:
   push:
@@ -28,6 +28,7 @@ jobs:
       - name: Build and test
         run: |
           cp .env.example .env
+          docker-compose -f .github/workflows/github-actions-docker-compose.yml config --services   # This checks the configuration
           docker-compose -f .github/workflows/github-actions-docker-compose.yml up -d
           sleep 30
           docker-compose -f .github/workflows/github-actions-docker-compose.yml ps
