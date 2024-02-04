@@ -49,9 +49,8 @@ jobs:
         run: pwd
 
       - name: Find docker-compose.yml
-        run: find $GITHUB_WORKSPACE -type f -name "docker-compose.yml"
+        run: find $GITHUB_WORKSPACE -type f -name "github-actions-docker-compose.yml"
 
       - name: Deploy to Production
         run: |
-          cd $GITHUB_WORKSPACE/.github/workflows
-          docker-compose -f github-actions-docker-compose.yml up -d
+          docker-compose -f $GITHUB_WORKSPACE/.github/workflows/github-actions-docker-compose.yml up -d
