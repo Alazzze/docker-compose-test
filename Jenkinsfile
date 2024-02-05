@@ -22,29 +22,33 @@ pipeline {
         }
 
         stage('Deploy') {
-            script {
-                sh 'docker-compose -f wordpress-docker-phpmyadmin/docker-compose.yml up -d'
+            steps {
+                script {
+                    sh 'docker-compose -f wordpress-docker-phpmyadmin/docker-compose.yml up -d'
+                }
             }
         }
 
         stage('Test') {
-            script {
-                // Додайте ваші тести тут, наприклад, використовуючи PHPUnit для WordPress
+            steps {
+                script {
+                    // Додайте ваші тести тут, наприклад, використовуючи PHPUnit для WordPress
+                }
             }
         }
     }
 
     post {
         success {
-            echo 'Deployment and tests passed. Ready for production!'
+            script {
+                echo 'Deployment and tests passed. Ready for production!'
+                sh 'docker-compose -f wordpress-docker-phpmyadmin/docker-compose.yml down'
+            }
         }
 
         failure {
-            echo 'Deployment or tests failed. Check the logs for details.'
-        }
-
-        always {
             script {
+                echo 'Deployment or tests failed. Check the logs for details.'
                 sh 'docker-compose -f wordpress-docker-phpmyadmin/docker-compose.yml down'
             }
         }
