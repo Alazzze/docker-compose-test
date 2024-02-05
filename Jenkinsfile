@@ -14,19 +14,21 @@ pipeline {
 
         stage('Build and Push Docker Image') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
-                sh 'docker push $DOCKER_IMAGE'
+                script {
+                    sh 'docker build -t $DOCKER_IMAGE .'
+                    sh 'docker push $DOCKER_IMAGE'
+                }
             }
         }
 
         stage('Deploy') {
-            steps {
+            script {
                 sh 'docker-compose -f wordpress-docker-phpmyadmin/docker-compose.yml up -d'
             }
         }
 
         stage('Test') {
-            steps {
+            script {
                 // Додайте ваші тести тут, наприклад, використовуючи PHPUnit для WordPress
             }
         }
@@ -42,7 +44,9 @@ pipeline {
         }
 
         always {
-            sh 'docker-compose -f wordpress-docker-phpmyadmin/docker-compose.yml down'
+            script {
+                sh 'docker-compose -f wordpress-docker-phpmyadmin/docker-compose.yml down'
+            }
         }
     }
 }
